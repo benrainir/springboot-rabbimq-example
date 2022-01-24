@@ -1,0 +1,29 @@
+version: "3"
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: 'globoplay_rabbitmq'
+    restart: always
+    ports:
+        - 5672:5672
+        - 15672:15672
+    networks:
+        - net
+
+  postgresql:
+    image: postgres
+    container_name: 'globoplay_postgres'
+    restart: always
+    environment: 
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+    ports:
+        - "5432:5432"
+    volumes:
+        - ./.docker/postgresql/data:/var/lib/postgresql/data 
+        - ./.docker/postgresql/sql/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
+    networks:
+        - net
+
+networks:
+    net:
